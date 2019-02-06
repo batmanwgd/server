@@ -259,7 +259,7 @@ this operation will be returned.
 Validation rules are:
 </p>
 
-* source accessibility is required:
+* source project type is required:
   * "OS" (Open Source, Publicly Available Repository), requires a valid accessible repository link
   * "ON" (Open Source, No Publicly Available Repository), requires a landing page
   * "CS" (Closed Source, Site Hosted), requires a landing page
@@ -382,7 +382,7 @@ A full JSON example is [provided below](#json_example).
 | Field Name | Description |
 | --- | --- |
 | code_id | The unique value given to a particular DOE CODE Project record once stored.  Should be *null* or not provided for new entries, and will be returned once a record is saved or submitted successfully. |
-| accessibility | This refers to how the source of the project type is accessed; must be one of "OS" (open source), "ON" (open source, not public), "CS" (closed source, site hosted), or "CO" (closed source, OSTI hosted) |
+| project_type | This refers to how the source of the project type is accessed; must be one of "OS" (open source), "ON" (open source, not public), "CS" (closed source, site hosted), or "CO" (closed source, OSTI hosted) |
 | repository_link | If the software project is available via public hosting service, such as github.com, bitbucket.org, etc. the public repository URL should be provided here.  DOE CODE does not currently support the submission of individual branch URL paths, so this must be a primary or base URL for the repository. |
 | landing_page | If the project is not available via open source hosting site, provide a URL describing the project and contact information for obtaining binary or source |
 | developers | An array of Objects, providing information about a project's developers or creators.  Array order determines display order.  Fields are [specified below](#persons_fields). |
@@ -507,7 +507,7 @@ metadata fields.
 ```json
 {
 "code_id":2651,
-"accessibility":"OS",
+"project_type":"OS",
 "software_type":"S",
 "repository_link":"https://github.com/doecode/doecode",
 "developers":[

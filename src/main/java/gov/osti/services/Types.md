@@ -203,15 +203,15 @@ Content-Type: application/json
 {"label":"BR Code","value":"BRCode"},
 {"label":"FWP Number","value":"FWPNumber"}]}
 ```
-### accessibility
+### projecttypes
 
-`GET /doecode/services/types/accessibility`
+`GET /doecodeapi/services/types/projecttypes`
 
-A listing of valid accessibility codes and descriptions.
+A listing of valid project type codes and descriptions.
 
 > Request:
 > ```
-> GET /doecodeapi/services/types/accessibility
+> GET /doecodeapi/services/types/projecttypes
 > ```
 > Response:
 > ```
@@ -219,7 +219,7 @@ A listing of valid accessibility codes and descriptions.
 > Content-Type: application/json
 > ```
 > ```json
-> {"accessibility":[
+> {"projectTypes":[
 > {"label":"Open Source","value":"OS"},
 > {"label":"Open Source, No Public Access","value":"ON"},
 > {"label":"Closed Source","value":"CS"},

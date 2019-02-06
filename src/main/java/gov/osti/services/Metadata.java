@@ -27,7 +27,7 @@ import gov.osti.entity.Agent;
 import gov.osti.entity.Contributor;
 import gov.osti.entity.MetadataSnapshot;
 import gov.osti.entity.DOECodeMetadata;
-import gov.osti.entity.DOECodeMetadata.Accessibility;
+import gov.osti.entity.DOECodeMetadata.ProjectType;
 import gov.osti.entity.DOECodeMetadata.Status;
 import gov.osti.entity.Developer;
 import gov.osti.entity.DoiReservation;
@@ -741,9 +741,8 @@ public class Metadata {
     private void store(EntityManager em, DOECodeMetadata md, User user) throws NotFoundException,
             IllegalAccessException, InvocationTargetException {
         // fix the open source value before storing
-        md.setOpenSource(
-                Accessibility.OS.equals(md.getAccessibility()) ||
-                Accessibility.ON.equals(md.getAccessibility()));
+        md.setOpenSource(ProjectType.OS.equals(md.getProjectType()) ||
+                ProjectType.ON.equals(md.getProjectType()));
 
         ValidatorFactory validators = javax.validation.Validation.buildDefaultValidatorFactory();
         Validator validator = validators.getValidator();
@@ -1547,7 +1546,7 @@ public class Metadata {
                 // if a FILE or CONTAINER was sent, create a File Object from it
                 File archiveFile = (null==file) ? null : new File(fullFileName);
                 File archiveContainer = (null==container) ? null : new File(fullContainerName);
-                if (DOECodeMetadata.Accessibility.CO.equals(md.getAccessibility()))
+                if (DOECodeMetadata.ProjectType.CO.equals(md.getProjectType()))
                     // if CO project type, no need to archive the repo because it is local GitLab
                     sendToArchiver(md.getCodeId(), null, archiveFile, archiveContainer);
                 else
@@ -1743,7 +1742,7 @@ public class Metadata {
                 // if a FILE or CONTAINER was sent, create a File Object from it
                 File archiveFile = (null==file) ? null : new File(fullFileName);
                 File archiveContainer = (null==container) ? null : new File(fullContainerName);
-                if (DOECodeMetadata.Accessibility.CO.equals(md.getAccessibility()))
+                if (DOECodeMetadata.ProjectType.CO.equals(md.getProjectType()))
                     // if CO project type, no need to archive the repo because it is local GitLab
                     sendToArchiver(md.getCodeId(), null, archiveFile, archiveContainer);
                 else
@@ -2272,8 +2271,8 @@ public class Metadata {
      */
     protected static List<String> validateSubmit(DOECodeMetadata m) {
         List<String> reasons = new ArrayList<>();
-        if (null==m.getAccessibility())
-            reasons.add("Missing Source Accessibility.");
+        if (null==m.getProjectType())
+            reasons.add("Missing Source Project Type.");
         if (StringUtils.isBlank(m.getSoftwareTitle()))
             reasons.add("Software title is required.");
         if (StringUtils.isBlank(m.getDescription()))
@@ -2308,17 +2307,17 @@ public class Metadata {
                 }
             }
         }
-        // if "OS" accessibility, a REPOSITORY LINK is REQUIRED
-        if (DOECodeMetadata.Accessibility.OS.equals(m.getAccessibility())) {
+        // if "OS" project type, a REPOSITORY LINK is REQUIRED
+        if (DOECodeMetadata.ProjectType.OS.equals(m.getProjectType())) {
             if (StringUtils.isBlank(m.getRepositoryLink()))
                 reasons.add("Repository URL is required for open source submissions.");
-        } else if (!DOECodeMetadata.Accessibility.CO.equals(m.getAccessibility())) {
+        } else if (!DOECodeMetadata.ProjectType.CO.equals(m.getProjectType())) {
             // non-OS & non-CO submissions require a LANDING PAGE (prefix with http:// if missing)
             if (!Validation.isValidUrl(m.getLandingPage()))
                 reasons.add("A valid Landing Page URL is required for non-open source submissions.");
         }
         // if repository link is present, and not CO, it needs to be valid too
-        if (StringUtils.isNotBlank(m.getRepositoryLink()) && !DOECodeMetadata.Accessibility.CO.equals(m.getAccessibility()) && !Validation.isValidRepositoryLink(m.getRepositoryLink()))
+        if (StringUtils.isNotBlank(m.getRepositoryLink()) && !DOECodeMetadata.ProjectType.CO.equals(m.getProjectType()) && !Validation.isValidRepositoryLink(m.getRepositoryLink()))
             reasons.add("Repository URL is not a valid repository.");
         return reasons;
     }
@@ -2373,7 +2372,7 @@ public class Metadata {
         if (StringUtils.isBlank(m.getRecipientOrg()))
             reasons.add("Contact organization is required.");
 
-        if (!DOECodeMetadata.Accessibility.OS.equals(m.getAccessibility()))
+        if (!DOECodeMetadata.ProjectType.OS.equals(m.getProjectType()))
             if (StringUtils.isBlank(m.getFileName()))
                 reasons.add("A file archive must be included for non-open source submissions.");
 
@@ -2648,7 +2647,7 @@ public class Metadata {
     private static void processOSTIGitLab(DOECodeMetadata md) throws Exception {
         try {
             // only process OSTI Hosted type
-            if (!DOECodeMetadata.Accessibility.CO.equals(md.getAccessibility()))
+            if (!DOECodeMetadata.ProjectType.CO.equals(md.getProjectType()))
                 return;
 
             String fileName = md.getFileName();

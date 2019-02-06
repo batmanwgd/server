@@ -78,8 +78,8 @@ public class DOECodeMetadata implements Serializable {
         Approved
     }
 
-    // Accessibility values
-    public enum Accessibility {
+    // Project Type values
+    public enum ProjectType {
         OS("Open Source"),
         ON("Open Source, No Public Access"),
         CS("Closed Source"),
@@ -87,7 +87,7 @@ public class DOECodeMetadata implements Serializable {
 
         private final String label;
 
-        private Accessibility(String label) {
+        private ProjectType(String label) {
             this.label = label;
         }
 
@@ -156,7 +156,7 @@ public class DOECodeMetadata implements Serializable {
     private Boolean openSource = null;
     private String  repositoryLink = null;
     private String landingPage = null;
-    private Accessibility accessibility = null;
+    private ProjectType projectType = null;
     // the SOFTWARE TYPE
     private Type softwareType;
     // set of Access Limitations (Strings)
@@ -663,13 +663,13 @@ public class DOECodeMetadata implements Serializable {
 	}
 
         @Enumerated (EnumType.STRING)
-        @Column (name = "ACCESSIBLIITY")
-	public Accessibility getAccessibility() {
-		return accessibility;
+        @Column (name = "PROJECT_TYPE")
+	public ProjectType getProjectType() {
+		return projectType;
 	}
 
-	public void setAccessibility(Accessibility accessibility) {
-		this.accessibility = accessibility;
+	public void setProjectType(ProjectType projectType) {
+		this.projectType = projectType;
 	}
 
         /**
